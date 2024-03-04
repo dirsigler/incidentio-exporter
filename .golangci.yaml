@@ -1,0 +1,35 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - errorlint
+    - exportloopref
+    - gofmt
+    - goimports
+    - gosec
+  disable:
+    - depguard
+    - wsl
+    - gomnd
+    - tagalign
+    - tagliatelle
+    - lll
+    - funlen
+    - dupl
+
+linters-settings:
+  gosec:
+    excludes: []
+    confidence: low
+    config:
+      global:
+        audit: true
+
+issues: {}
+
+output:
+  sort-results: true
