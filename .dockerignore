@@ -1,0 +1,34 @@
+# Ignore development and system files
+.dockerignore
+.git
+.gitignore
+.envrc
+.env
+.editorconfig
+.pre-commit-config.yaml
+.golangci.yaml
+
+# Ignore editor and IDE files
+.vscode
+.idea
+
+# Ignore temporary files and build artifacts
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Ignore Docker-specific files
+Dockerfile*
+.dockerignore
+.docker
+.dockerignore
+
+# Ignore project-specific files or directories
+config/*.env
+logs
+examples
+renovate.json
+Taskfile.yml
