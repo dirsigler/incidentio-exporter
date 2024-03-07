@@ -19,6 +19,10 @@ The Incident.io Prometheus Exporter supports all basic pre-configured types of i
 
 ## 🚀 Deployment
 
+> IMPORTANT: You have to provide the "INCIDENTIO_API_KEY="<MY_API_KEY>" environment variable to your deployment for the Incident.io Prometheus Exporter to work.
+
+---
+
 With each [release](https://github.com/dirsigler/incidentio-exporter/releases) I also provide a [secure by default](https://www.chainguard.dev/chainguard-images) Docker Image.
 
 You can chose from:

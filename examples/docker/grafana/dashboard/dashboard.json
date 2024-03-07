@@ -133,7 +133,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "incidentio_exporter_total_count",
+          "expr": "incidentio_incidents_total_count",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -211,7 +211,7 @@
             "uid": "Prometheus"
           },
           "editorMode": "code",
-          "expr": "incidentio_exporter_status_count{}",
+          "expr": "incidentio_incidents_status_count{}",
           "legendFormat": "{{status}}",
           "range": true,
           "refId": "A"
@@ -284,7 +284,7 @@
             "uid": "Prometheus"
           },
           "editorMode": "code",
-          "expr": "incidentio_exporter_severity_count",
+          "expr": "incidentio_incidents_severity_count",
           "legendFormat": "{{severity}}",
           "range": true,
           "refId": "A"
@@ -357,7 +357,7 @@
             "uid": "Prometheus"
           },
           "editorMode": "code",
-          "expr": "incidentio_exporter_environment_count",
+          "expr": "incidentio_incidents_environment_count",
           "legendFormat": "{{environment}}",
           "range": true,
           "refId": "A"

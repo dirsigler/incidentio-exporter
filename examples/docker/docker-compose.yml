@@ -32,8 +32,7 @@ services:
     restart: always
 
   incidentio-exporter:
-    build:
-      context: ../../
+    image: docker.io/dirsigler/incidentio-exporter:latest
     container_name: incidentio-exporter
     environment:
       - INCIDENTIO_API_KEY=${INCIDENTIO_API_KEY}
