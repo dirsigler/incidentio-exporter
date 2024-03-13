@@ -1,6 +1,8 @@
 # Prometheus Exporter for [incident.io](https://incident.io)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8660/badge)](https://www.bestpractices.dev/projects/8660)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dirsigler/incidentio-exporter)](https://goreportcard.com/report/github.com/dirsigler/incidentio-exporter)
 
 This is an custom Prometheus Exporter for the awesome https://incident.io incident management solution.
 
