@@ -1,0 +1,167 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 2
+
+project_name: incidentio-exporter
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/exporter
+    binary: incidentio-exporter
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.buildDate={{.Date}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+dockers:
+  - image_templates:
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    goos: linux
+    goarch: amd64
+    skip_push: auto
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--label=org.opencontainers.image.description=Prometheus exporter for incident.io metrics"
+      - "--label=org.opencontainers.image.licenses=Apache-2.0"
+
+  - image_templates:
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    goos: linux
+    goarch: arm64
+    skip_push: auto
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--label=org.opencontainers.image.description=Prometheus exporter for incident.io metrics"
+      - "--label=org.opencontainers.image.licenses=Apache-2.0"
+
+docker_manifests:
+  - name_template: "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}"
+    image_templates:
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+    skip_push: auto
+
+  - name_template: "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}"
+    image_templates:
+      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
+      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+    skip_push: auto
+
+  - name_template: "docker.io/dirsigler/{{.ProjectName}}:latest"
+    image_templates:
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+    skip_push: auto
+
+  - name_template: "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+    skip_push: auto
+
+  - name_template: "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}"
+    image_templates:
+      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+    skip_push: auto
+
+  - name_template: "ghcr.io/dirsigler/{{.ProjectName}}:latest"
+    image_templates:
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
+    skip_push: auto
+
+archives:
+  - id: archive
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    files:
+      - LICENSE
+      - README.md
+    formats:
+      - tar.gz
+      - zip
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+
+checksum:
+  name_template: "checksums.txt"
+
+sboms:
+  - artifacts: archive
+
+snapshot:
+  version_template: "{{ .Version }}-SNAPSHOT-{{ .ShortCommit }}"
+
+release:
+  github:
+    owner: dirsigler
+    name: incidentio-exporter
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+      - "Merge pull request"
+      - "Merge branch"
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: Bug Fixes
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: Performance Improvements
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: Others
+      order: 999
+
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"

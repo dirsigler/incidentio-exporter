@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+version: "2"
+
+run:
+  timeout: 5m
+  go: "1.26"
+
+
+linters:
+  enable:
+    - bodyclose
+    - gosec
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+  disable:
+    - depguard
+    - errcheck
+  settings:
+    gosec:
+      excludes: []
+      confidence: low
+      config:
+        global:
+          audit: true
+    errcheck:
+      exclude-functions:
+        - (net/http.ResponseWriter).Write
+        - (*net/http.ResponseWriter).Write
+  exclusions:
+    presets: []
+    paths:
+      - bin
+      - vendor
+      - ".*_test.go$"
+    rules:
+      - linters:
+          - errcheck
+        text: "Error return value of `.*Close` is not checked"
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  sort-order:
+    - file
+    - linter
