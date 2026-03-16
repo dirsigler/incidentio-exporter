@@ -41,3 +41,13 @@ jobs:
       - uses: actions/attest-build-provenance@v4
         with:
           subject-checksums: ./dist/checksums.txt
+      - name: Make Docker Hub repository public
+        run: |
+          TOKEN=$(curl -s -X POST "https://hub.docker.com/v2/users/login/" \
+            -H "Content-Type: application/json" \
+            -d '{"username": "${{ secrets.DOCKERHUB_USERNAME }}", "password": "${{ secrets.DOCKERHUB_TOKEN }}"}' \
+            | jq -r .token)
+          curl -s -X PATCH "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}/" \
+            -H "Authorization: JWT ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{"is_private": false}'
