@@ -28,9 +28,7 @@ builds:
 dockers:
   - image_templates:
       - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
       - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
     dockerfile: Dockerfile
     use: buildx
     goos: linux
@@ -49,9 +47,7 @@ dockers:
 
   - image_templates:
       - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
-      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
       - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
-      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
     dockerfile: Dockerfile
     use: buildx
     goos: linux
@@ -77,8 +73,8 @@ docker_manifests:
 
   - name_template: "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}"
     image_templates:
-      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
-      - "docker.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "docker.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
     skip_push: auto
 
   - name_template: "docker.io/dirsigler/{{.ProjectName}}:latest"
@@ -95,8 +91,8 @@ docker_manifests:
 
   - name_template: "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}"
     image_templates:
-      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-amd64"
-      - "ghcr.io/dirsigler/{{.ProjectName}}:v{{ .Major }}-arm64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/dirsigler/{{.ProjectName}}:{{ .Tag }}-arm64"
     skip_push: auto
 
   - name_template: "ghcr.io/dirsigler/{{.ProjectName}}:latest"
